@@ -54,9 +54,30 @@ function setReportTemplate() {
     var day = splitText.split("日")[0];
 
     postedDate = new Date(year + "/" + month + "/" + day);
-    var numOfRewriteOnMonday = -3;
+
+    // 木曜日に週報提出依頼が来る前提の補正値
+    //var numOfRewriteOnMonday = -3;
+
+    // 曜日情報を利用した補正値
+    var numOfRewriteOnMonday = searchMondayDate(postedDate);
 
     return manageDate(postedDate, numOfRewriteOnMonday);
+  }
+
+  // 月曜日に補正するための日数を算出する
+  function searchMondayDate(currentDate) {
+    var correctionValue = 0;
+    var mondayDate = 1;
+
+    // 日曜日の場合とそれ以外の日の補正値計算
+    if (currentDate.getDay() == 0) {
+      correctionValue = -6;
+    }
+    else {
+      correctionValue = (currentDate.getDay() - mondayDate)*-1
+    }
+
+    return correctionValue;
   }
 
   function manageDate(currentDate, num) {
